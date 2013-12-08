@@ -339,5 +339,5 @@ module.exports = function (grunt) {
     'build'
   ]);
   
-  grunt.loadNpmTasks("grunt-angular-phonegap");
+  grunt.loadNpmTasks('grunt-angular-phonegap');
 };
