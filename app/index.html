@@ -9,12 +9,16 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
-        <!-- build:css(.tmp) styles/main.css -->
-        <link rel="stylesheet" href="styles/bootstrap.css">
-        <link rel="stylesheet" href="styles/main.css">
-        <!-- endbuild -->
+    <!-- build:css(.tmp) styles/main.css -->
+    <link rel="stylesheet" href="styles/bootstrap.css">
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild -->
+
+    <link rel="stylesheet" href="bower_components/angular-snap/angular-snap.min.css">
+
 </head>
   <body ng-app="posApp">
     <!--[if lt IE 7]>
@@ -26,8 +30,72 @@
       <script src="bower_components/json3/lib/json3.min.js"></script>
     <![endif]-->
 
+
+
+
+
+    <!-- Sidebar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+        <!-- Brand and toggle get grouped for better mobile display -->
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse" ng-click="openMenu()">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#/dashboard"><i class="fa fa-bell-o"></i> Bell Manager</a>
+        </div>
+
+        <!-- Collect the nav links, forms, and other content for toggling -->
+        <div class=" navbar-collapse navbar-ex1-collapse1 {{collapseClass}}" style="">
+            <ul class="nav navbar-nav side-nav">
+                <li ng-click="menuCollapse()"><a href="#/dashboard"><i class="fa fa-dashboard"></i> Tổng quan</a></li>
+                <li ng-click="menuCollapse()"><a href="#/monitor"><i class="fa fa-bar-chart-o"></i> Monitor Bar</a></li>
+                <li ng-click="menuCollapse()"><a href="#/analytics"><i class="fa fa-bar-chart-o"></i> Thống kê</a></li>
+                <li ng-click="menuCollapse()"><a href="#/orders" ui-sref="ManangerOrders"><i class="fa fa-desktop"></i> Quản lý Orders</a></li>
+                <li ng-click="menuCollapse()"><a href="#/menus" ui-sref="ManangerMenu"><i class="fa fa-tasks"></i> Quản lý Menu</a></li>
+                <li ng-click="menuCollapse()"><a href="#/userfinalization" ui-sref="userFinalization"><i class="fa fa-tasks"></i> Nhân viên quyết toán</a></li>
+                <li ng-click="menuCollapse()"><a href="#/users" ui-sref="ManagerUser"><i class="fa fa-users"></i> Nhân viên</a></li>
+                <li ng-click="menuCollapse()"><a href="#/settings" ui-sref="Settings"><i class="fa fa-wrench"></i> Hệ thống</a></li>
+                <li><a href="" ng-click="logout()" ui-sref="Login"  ng-click="menuCollapse()"><i class="fa fa-mail-reply"></i> Thoát</a></li>
+            </ul>
+
+            <ul class="nav navbar-nav navbar-right navbar-user">
+
+                <li class="dropdown alerts-dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-bell"></i> Label <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#">Thông báo <span class="label label-default pull-right">Notify</span></a></li>
+                        <li><a href="#">Đang xử lý <span class="label label-primary pull-right">Wait</span></a></li>
+                        <li><a href="#">Hoàn thành <span class="label label-success pull-right">Done</span></a></li>
+                        <li><a href="#">Thông tin <span class="label label-info pull-right">Info</span></a></li>
+                        <li><a href="#">Thay đổi <span class="label label-warning pull-right">Warning</span></a></li>
+                        <li><a href="#">Bị hủy <span class="label label-danger pull-right">Danger</span></a></li>
+                        <li class="divider"></li>
+                        <li><a href="#">Xem tất cả thông báo</a></li>
+                    </ul>
+                </li>
+                <li class="dropdown user-dropdown">
+                    <a href="" class="dropdown-toggle" data-toggle="dropdown"><i class="fa fa-user"></i> {{getUserFullName()}} <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a href="#"><i class="fa fa-user"></i> Thông tin</a></li>
+                        <li><a href="#"><i class="fa fa-gear"></i> Thiết lập</a></li>
+                        <li class="divider"></li>
+                        <li><a href="/#/dashboard" ng-click="logout()"><i class="fa fa-power-off"></i> Thoát</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div><!-- /.navbar-collapse -->
+    </nav>
+
     <!-- Add your site or application content here -->
-    <div class="container" ng-view=""></div>
+    <div class="container" ng-view="" snap-content></div>
+
+
+
+
+
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
      <script>
@@ -40,34 +108,48 @@
        ga('send', 'pageview');
     </script>
 
+<!--
+    <script src="bower_components/snapjs/snap.js"></script>
+-->
     <script src="bower_components/jquery/jquery.js"></script>
     <script src="bower_components/angular/angular.js"></script>
+<!--
+    <script src="bower_components/angular-snap/angular-snap.min.js"></script>
+-->
+    <script type="text/javascript" src="bower_components/jaydata/jaydata.min.js"></script>
+<!--
+    <script src="bower_components/jaydata/jaydataproviders/WebApiProvider.min.js"></script>
+-->
 
-        <!-- build:js scripts/plugins.js -->
-        <script src="bower_components/sass-bootstrap/js/affix.js"></script>
-        <script src="bower_components/sass-bootstrap/js/alert.js"></script>
-        <script src="bower_components/sass-bootstrap/js/button.js"></script>
-        <script src="bower_components/sass-bootstrap/js/carousel.js"></script>
-        <script src="bower_components/sass-bootstrap/js/transition.js"></script>
-        <script src="bower_components/sass-bootstrap/js/collapse.js"></script>
-        <script src="bower_components/sass-bootstrap/js/dropdown.js"></script>
-        <script src="bower_components/sass-bootstrap/js/modal.js"></script>
-        <script src="bower_components/sass-bootstrap/js/scrollspy.js"></script>
-        <script src="bower_components/sass-bootstrap/js/tab.js"></script>
-        <script src="bower_components/sass-bootstrap/js/tooltip.js"></script>
-        <script src="bower_components/sass-bootstrap/js/popover.js"></script>
-        <!-- endbuild -->
 
-        <!-- build:js scripts/modules.js -->
-        <script src="bower_components/angular-resource/angular-resource.js"></script>
-        <script src="bower_components/angular-cookies/angular-cookies.js"></script>
-        <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
-        <script src="bower_components/angular-route/angular-route.js"></script>
-        <!-- endbuild -->
+    <!-- build:js scripts/plugins.js -->
+    <script src="bower_components/sass-bootstrap/js/affix.js"></script>
+    <script src="bower_components/sass-bootstrap/js/alert.js"></script>
+    <script src="bower_components/sass-bootstrap/js/button.js"></script>
+    <script src="bower_components/sass-bootstrap/js/carousel.js"></script>
+    <script src="bower_components/sass-bootstrap/js/transition.js"></script>
+    <script src="bower_components/sass-bootstrap/js/collapse.js"></script>
+    <script src="bower_components/sass-bootstrap/js/dropdown.js"></script>
+    <script src="bower_components/sass-bootstrap/js/modal.js"></script>
+    <script src="bower_components/sass-bootstrap/js/scrollspy.js"></script>
+    <script src="bower_components/sass-bootstrap/js/tab.js"></script>
+    <script src="bower_components/sass-bootstrap/js/tooltip.js"></script>
+    <script src="bower_components/sass-bootstrap/js/popover.js"></script>
+    <!-- endbuild -->
 
-        <!-- build:js({.tmp,app}) scripts/scripts.js -->
-        <script src="scripts/app.js"></script>
-        <script src="scripts/controllers/main.js"></script>
-        <!-- endbuild -->
+    <!-- build:js scripts/modules.js -->
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-cookies/angular-cookies.js"></script>
+    <script src="bower_components/angular-sanitize/angular-sanitize.js"></script>
+    <script src="bower_components/angular-route/angular-route.js"></script>
+    <script src="bower_components/angular-ui-bootstrap/src/pagination/pagination.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/controllers/main.js"></script>
+    <script src="scripts/services/remoteDatabase.js"></script>
+    <script src="scripts/services/restful.js"></script>
+    <!-- endbuild -->
 </body>
 </html>

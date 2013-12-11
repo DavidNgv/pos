@@ -1,30 +1,154 @@
 <div class="header">
-	<ul class="nav nav-pills pull-right">
-		<li class="active"><a href="#">Home</a></li>
-		<li><a href="#">About</a></li>
-		<li><a href="#">Contact</a></li>
-	</ul>
-	<h3 class="text-muted">pos</h3>
+    <ul class="nav nav-pills pull-right">
+        <li class="active"><a href="#">Home</a></li>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Contact</a></li>
+    </ul>
+    <h3 class="text-muted">TestApp</h3>
 </div>
 
-<div class="jumbotron">
-	<h1>'Allo, 'Allo!</h1>
-	<p class="lead">Always a pleasure scaffolding your apps.</p>
-	<p><a class="btn btn-lg btn-success" href="#">Splendid!</a></p>
-</div>
 
-<div class="row marketing">
-	<h4>HTML5 Boilerplate</h4>
-	<p>HTML5 Boilerplate is a professional front-end template for building fast, robust, and adaptable web apps or sites.</p>
+<div class="row" ng-cloak>
+    <div class="col-lg-12">
+        <h1>Menu <small>Quản lý Menu</small></h1>
+        <ol class="breadcrumb">
+            <li><a href="index.html"><i class="fa fa-dashboard"></i> Tổng quan</a></li>
+            <li class="active"><i class="fa fa-table"></i> Quản lý Menus</li>
+        </ol>
 
-	<h4>Angular</h4>
-	<p>AngularJS is a toolset for building the framework most suited to your application development.</p>
+    </div>
+    <div class="col-lg-8">
+        <div class="table-responsive menu-tables">
 
-	<h4>Karma</h4>
-	<p>Spectacular Test Runner for JavaScript.</p>
-</div>
+            <div ng-show="readProcessing" class="overlay">
+                <div><img src="vendor/img/loading.gif" width="30" class="loading"/></div>
+            </div>
+            <table class="table table-striped table-hover tablesorter ">
+                <thead>
+                <tr>
+                    <th>#</th>
+                    <th ng-click="sortByFieldName('name')">Tên&nbsp;món <i class="fa fa-caret-{{statusSortName}}" ></i></th>
+                    <th class="text-center">Hình&nbsp;ảnh</th>
+                    <th>Tên&nbsp;tiếng&nbsp;anh</th>
+                    <th class="text-right" ng-click="sortByFieldName('price')">Giá <i class="fa fa-caret-{{statusSortPrice}}"></i></th>
+                    <th>Loại </th>
+                    <th>Tùy&nbsp;chỉnh</th>
+                </tr>
+                <tr>
+                    <th></th>
+                    <th><input type="text" placeholder="Tìm kiếm theo tên ..." ng-model="filters[0].value" ng-change="onNameChange('name')" class="form-control"/></th>
+                    <th></th>
+                    <th></th>
+                    <th></th>
+                    <th style="width: 100px;">
+                        <input type="checkbox" ng-model="searchType1" ng-change="onSearchType()">&nbsp;Đồ&nbsp;ăn<br />
+                        <input type="checkbox" ng-model="searchType2" ng-change="onSearchType()">&nbsp;Đồ&nbsp;uống
+                    </th>
+                    <th></th>
+                </tr>
+                </thead>
+                <tbody>
+
+                <tr ng-repeat="item in menuData" ng-click="getUpdate(item)" ng-class="{'success' : target == (item.id)}">
+                    <td>{{$index + limit*(currentPage-1) + 1}}</td>
+                    <td>{{item.name}}</td>
+                    <td><img src="{{mediaHost + '/' + item.url}}" width="50px" /></td>
+                    <td>{{item.enName}}</td>
+                    <td><strong class="price">{{item.price}}</strong></td>
+                    <td>{{item.type}}</td>
+                    <td>
+                        <div class="btn-group">
+                            <a href="" ng-click="delete(item.id)" class="btn btn-danger"><i class="glyphicon glyphicon-trash"> </i></a>
+                        </div>
+
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        <pagination total-items="totalItems" items-per-page="limit" page="currentPage" on-select-page="setPage(page)" max-size="maxSize" class="pagination-small" boundary-links="true" rotate="false" num-pages="numPages"></pagination>
+    </div>
+    <!--Create - Update -->
+    <div class="col-lg-4">
+        <span class='label label-primary' style='display: block; margin-bottom: 20px;'>Món</span>
+        <!--<input type="text" placeholder="Search by Name..." ng-model="item.name" class="form-control"/>-->
+        <br />
+        <form class="form-horizontal" role="form" name="frmMenus">
+            <div class="form-group">
+                <label for="id" class="col-sm-4 control-label">ID</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="data.id" id="id" disabled>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="nameProduct" class="col-sm-4 control-label">Tên </label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="data.name" id="nameProduct" placeholder="Cơm gà chiên" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="enName" class="col-sm-4 control-label">Tên tiếng anh</label>
+                <div class="col-sm-8">
+                    <input type="text" class="form-control" ng-model="data.enName" id="enName" placeholder="Chicken" required>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="price" class="col-sm-4 control-label">Đơn giá</label>
+                <div class="col-sm-8">
+                    <div class="input-group">
+                        <span class="input-group-addon"><b>VNĐ</b></span>
+
+                        <input type="text" id="price" ng-model="data.price" name="price" class="form-control" placeholder="130.000" required ng-pattern="/[0-9]/" >
+
+                    </div>
+                    <p class="text-danger form-error" ng-show="frmMenus.price.$error.pattern">Đơn giá phải là số ! </p>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="allowOrder" class="col-sm-4 control-label">Trạng thái</label>
+                <div class="col-sm-8">
+                    <label class="checkbox-inline">
+                        <input type="checkbox" name='allowOrder' ng-model="data.allowOrder"  id='allowOrder' value='1' ng-checked="true" > Cho phép Order
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="upload" class="col-sm-4 control-label">Hình ảnh</label>
+                <div class="col-sm-8">
+                    <div class="form-group">
+                        <img src="{{getUrl(data.url)}}" width="100px" style="padding-bottom: 10px"/>
+                        <input type="file" id="upload" ng-file-select="onFileSelect($files, data)">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="type" class="col-sm-4 control-label">Loại</label>
+                <div class="col-sm-8">
+                    <label class="radio-inline">
+                        <input type="radio" name="type" id="type"  ng-model="data.type" value="doan" required> Đồ ăn
+                    </label>
+                    <label class="radio-inline">
+                        <input type="radio" name="type"  ng-model="data.type"  value="douong" required> Đồ uống
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-8">
+                    <button ng-show="toggleSave" type="submit" ng-click="save(data)" class="btn btn-primary" ng-disabled="!frmMenus.$valid || crudProcessing "><img src="vendor/img/loading.gif" width="20" ng-show="crudProcessing"/> &nbsp;Tạo mới</button>
+                    <div ng-show="toggleUpdate">
+                        <button ng-show="toggleUpdate" type="submit" ng-click="update(data)" class="btn btn-success" ng-disabled="!frmMenus.$valid || crudProcessing"><img src="vendor/img/loading.gif" width="20" ng-show="crudProcessing"/> &nbsp;Lưu lại</button>
+                        <button  ng-click="toSave()" class="btn btn-primary">Hủy</button>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div><!-- /.row -->
+
 </div>
 
 <div class="footer">
-	<p>♥ from the Yeoman team</p>
+    <p>♥ from the Yeoman team</p>
 </div>

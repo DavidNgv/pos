@@ -4,7 +4,8 @@ angular.module('posApp', [
   'ngCookies',
   'ngResource',
   'ngSanitize',
-  'ngRoute'
+  'ngRoute',
+  'ui.bootstrap.pagination',
 ])
   .config(function ($routeProvider) {
     $routeProvider
@@ -15,4 +16,10 @@ angular.module('posApp', [
       .otherwise({
         redirectTo: '/'
       });
-  });
+  })
+  .run(['$rootScope', function($rootScope){
+
+    $rootScope.apiHost = 'http://localhost:6789';
+    $rootScope.mediaHost = $rootScope.apiHost;
+
+  }]);
